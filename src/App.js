@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 var BASE_URL = 'https://glex.nathanvangheem.com/';
@@ -27,7 +26,8 @@ class App extends Component {
 	this.state = {
 	    videos: {},
 	    selectedVideo: null,
-	    authToken: null
+	    authToken: null,
+	    filter: ''
 	};
     }
 
@@ -47,18 +47,59 @@ class App extends Component {
 	});
     }
 
+    getFilteredVideos(){
+	if(!this.state.filter){
+	    return Object.values(this.state.videos);
+	}
+	var matched = [];
+	var filter = this.state.filter;
+	Object.values(this.state.videos).forEach(function(video){
+	    if(video.name.toLowerCase().indexOf(filter.toLowerCase()) !== -1){
+		matched.push(video);
+	    }
+	});
+	return matched;
+    }
+
+    filterChanged(e){
+	this.setState({
+	    filter: e.target.value
+	});
+    }
+
     render() {
 	var self = this;
 	var videos = [];
-	Object.values(this.state.videos).forEach(function(video){
-	    videos.push(<li key={video.id}><button onClick={self.selectVideo.bind(self, video)}>{video.name}</button></li>);
+	var videoGroup = [];
+	var count = 0;
+	this.getFilteredVideos().forEach(function(video){
+	    videoGroup.push(<div className="col s6 m3" key={video.id}>
+      			      <div className="card">
+			         <div className="card-content">
+			           {video.name}
+			         </div>
+			         <div className="card-action">
+			           <a className="waves-effect waves-light btn" onClick={self.selectVideo.bind(self, video)}>Watch</a>
+			         </div>
+			      </div>
+			    </div>);
+	    if(videoGroup.length === 4){
+		var key = "videogroup" + count;
+		videos.push(<div className="row" key={key}>{videoGroup}</div>);
+		videoGroup = [];
+		count += 1;
+	    }
 	});
+	if(videoGroup.length > 0){
+	    var key = "videogroup" + count;
+	    videos.push(<div className="row" key={key}>{videoGroup}</div>);
+	}
 	var selectedVideo = '';
 	if(this.state.selectedVideo){
 	    var url = BASE_URL + "@download?id=" + this.state.selectedVideo;
 	    selectedVideo = (
-		<div class="video-container">
-		    <video key="{this.state.selectedVideo}-container"
+		<div className="glex-video-container">
+		    <video key="{this.state.selectedVideo}-container" className="responsive-video" autoPlay
 		           id={this.state.selectedVideo} controls
 		           src={url}>
 
@@ -69,11 +110,12 @@ class App extends Component {
 	return (
 	    <div className="App">
 		
-		{selectedVideo}
-		<ul>
-		{videos}
-	    </ul>
-	</div>
+	    {selectedVideo}
+	    <div className="input-field col s12">
+		<input id="filter" type="text" placeholder="Filter" value={this.state.filter} onChange={this.filterChanged.bind(self)}></input>
+            </div>
+	    {videos}
+	    </div>
     );
   }
 }
