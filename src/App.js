@@ -55,7 +55,7 @@ class App extends Component {
 	});
 	var selectedVideo = '';
 	if(this.state.selectedVideo){
-	    var url = "http://localhost:8080/@download?id=" + this.state.selectedVideo;
+	    var url = BASE_URL + "@download?id=" + this.state.selectedVideo;
 	    selectedVideo = (
 		<div class="video-container">
 		    <video key="{this.state.selectedVideo}-container"
