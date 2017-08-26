@@ -20,6 +20,28 @@ var http = function(url, method, callback){
 };
 
 
+class Video {
+    constructor(data){
+	this.id = data['id'];
+	this.title = data['filename'].split('.')[0];
+	this.rated = 'Unknown';
+	this.image = 'movie.png';
+	this.plot = this.rating = this.length = this.year = null;
+	if(data['data'] && data['data']['Response'] == 'True'){
+	    data = data['data']
+	    if(data['Type'] == 'movie'){
+		this.title = data['Title'];
+	    }
+	    this.rated = data['Rated'];
+	    this.rating = data['imdbRating'];
+	    this.image = data['Poster'];
+	    this.year = data['Year'];
+	    this.length = data['Runtime'];
+	    this.plot = data['Plot'];
+	}
+    }
+}
+
 class App extends Component {
     constructor(props){
 	super(props);
@@ -72,14 +94,37 @@ class App extends Component {
 	var videos = [];
 	var videoGroup = [];
 	var count = 0;
-	this.getFilteredVideos().forEach(function(video){
+	this.getFilteredVideos().forEach(function(videoData){
+	    var video = new Video(videoData);
+	    var image = '';
+	    if(video.image){
+		image = <div className="card-image"><img src={video.image} alt="movie"></img></div>
+	    }
+	    var badges = [];
+	    if(video.rating){
+	        badges.push(<span className="chip">IMDB: {video.rating}</span>);
+	    }
+	    if(video.rated){
+		badges.push(<span className="chip">{video.rated}</span>);
+	    }
+	    if(video.year){
+		badges.push(<span className="chip">{video.year}</span>);
+	    }
+	    if(video.length){
+		badges.push(<span className="chip">{video.length}</span>);
+	    }
+	    var url = BASE_URL + "@download?id=" + video.id;
 	    videoGroup.push(<div className="col s6 m3" key={video.id}>
-      			      <div className="card">
-			         <div className="card-content">
-			           {video.name}
+      			    <div className="card">
+			    {image}
+			    <div className="card-content">
+			    <span className="card-title">{video.title}</span>
+			    {video.plot}
+			    {badges}
 			         </div>
 			         <div className="card-action">
 			           <a className="waves-effect waves-light btn" onClick={self.selectVideo.bind(self, video)}>Watch</a>
+          			    <a className="waves-effect waves-light btn" target="_blank"  href={url}>Download</a>
 			         </div>
 			      </div>
 			    </div>);
