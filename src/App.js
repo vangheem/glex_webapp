@@ -3,8 +3,9 @@ import './App.css';
 
 var BASE_URL = 'https://glex.nathanvangheem.com/';
 
-var http = function(url, method, callback){
+var http = function(url, method, callback, data){
     var xhr = new XMLHttpRequest();
+
     xhr.onreadystatechange = function () {
 	if (xhr.readyState === 4) {
 	    if (xhr.status === 200) {
@@ -16,7 +17,12 @@ var http = function(url, method, callback){
     };
     xhr.open(method, url, true);
     xhr.setRequestHeader("Authorization", "Basic " + btoa("root:root"));
-    xhr.send();
+    if(data){
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    }else{
+	data = '';
+    }
+    xhr.send(data);
 };
 
 
@@ -34,7 +40,9 @@ class Video {
 	    }
 	    this.rated = data['Rated'];
 	    this.rating = data['imdbRating'];
-	    this.image = data['Poster'];
+	    if(data['Poster'] && data['Poster'] != 'N/A'){
+		this.image = data['Poster'];
+	    }
 	    this.year = data['Year'];
 	    this.length = data['Runtime'];
 	    this.plot = data['Plot'];
@@ -48,6 +56,7 @@ class App extends Component {
 	this.state = {
 	    videos: {},
 	    selectedVideo: null,
+	    editVideo: null,
 	    authToken: null,
 	    filter: ''
 	};
@@ -67,6 +76,7 @@ class App extends Component {
 	this.setState({
 	    selectedVideo: video.id
 	});
+	window.scrollTo(0, 0);
     }
 
     getFilteredVideos(){
@@ -89,6 +99,54 @@ class App extends Component {
 	});
     }
 
+    editVideoClicked(video, e){
+	e.preventDefault();
+	this.setState({
+	    editVideo: video.id
+	});
+    }
+
+    saveVideoEditClicked(e){
+	e.preventDefault();
+    }
+
+    closeVideoEditClicked(e){
+	e.preventDefault();
+	this.setState({
+	    editVideo: null
+	});
+    }
+    
+    renderEditVideo(){
+	var self = this;
+	var styleProps = {
+	    zIndex: 1003,
+	    display: "block",
+	    opacity: 1,
+	    transform: "scaleX(1)",
+	    top: "10%"
+	};
+	var video = this.state.videos[this.state.editVideo];
+	var videoObj = new Video(video);
+	var videoData = video['data'] || {};
+	return (<div className="modal open" style={styleProps}>
+          <div className="modal-content">
+	    <h4>Edit {videoObj.title}</h4>
+            <form className="col s12">
+		<div className="row">
+		<div className="input-field col s6">
+		<input placeholder="Placeholder" id="first_name" type="text" className="validate"></input>
+		<label htmlFor="first_name">First Name</label>
+		</div>
+		</div>
+		</form>
+          <div className="modal-footer">
+		<a href="#!" className="modal-action modal-close waves-effect waves-red btn-flat " onClick={self.closeVideoEditClicked.bind(self)}>Close</a>
+		<a href="#!" className="modal-action modal-close waves-effect waves-green btn-flat " onClick={self.saveVideoEditClicked.bind(self)}>Save</a>
+          </div>
+		</div>);
+    }
+    
     render() {
 	var self = this;
 	var videos = [];
@@ -113,6 +171,7 @@ class App extends Component {
 	    if(video.length){
 		badges.push(<span className="chip">{video.length}</span>);
 	    }
+	    badges.push(<span className="chip"><a href="#" onClick={self.editVideoClicked.bind(self, video)}>Edit</a></span>);
 	    var url = BASE_URL + "@download?id=" + video.id;
 	    videoGroup.push(<div className="col s6 m3" key={video.id}>
       			    <div className="card">
@@ -124,7 +183,7 @@ class App extends Component {
 			         </div>
 			         <div className="card-action">
 			           <a className="waves-effect waves-light btn" onClick={self.selectVideo.bind(self, video)}>Watch</a>
-          			    <a className="waves-effect waves-light btn" target="_blank"  href={url}>Download</a>
+          			   <a className="waves-effect waves-light btn" href={url}>Download</a>
 			         </div>
 			      </div>
 			    </div>);
@@ -152,10 +211,15 @@ class App extends Component {
 		</div>
             );
 	}
+	var editVideo = '';
+	if(this.state.editVideo){
+	    editVideo = this.renderEditVideo();
+	}
 	return (
 	    <div className="App">
 		
 	    {selectedVideo}
+	    {editVideo}
 	    <div className="input-field col s12">
 		<input id="filter" type="text" placeholder="Filter" value={this.state.filter} onChange={this.filterChanged.bind(self)}></input>
             </div>
