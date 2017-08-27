@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 
 var BASE_URL = 'https://glex.nathanvangheem.com/';
+//var BASE_URL = 'http://localhost:8080/';
 
 var http = function(url, method, callback, data){
     var xhr = new XMLHttpRequest();
@@ -108,6 +109,28 @@ class App extends Component {
 
     saveVideoEditClicked(e){
 	e.preventDefault();
+	var self = this;
+	var video = this.state.videos[this.state.editVideo];
+	var videoData = video['data'] || {};
+	videoData['Response'] = 'True';
+	if(videoData.Type === undefined){
+	    videoData.Type = 'movie';
+	}
+	['Actors', 'Awards', 'Country', 'Director', 'Genre', 'Language', 'Metascore', 'Plot', 'Poster', 'Rated', 'Ratings',
+	 'Released', 'Response', 'Runtime', 'Title', 'Type', 'Writer', 'Year', 'imdbID', 'imdbRating', 'imdbVotes', 'totalSeasons'].forEach(function(fieldName){
+	     if(videoData[fieldName] === undefined){
+		 videoData[fieldName] = '';
+	     }
+	 });
+
+	http(BASE_URL + '@edit-data', 'POST', function(xhr){
+	    self.setState({
+		editVideo: null
+	    });
+	}, JSON.stringify({
+	    id: this.state.editVideo,
+	    data: videoData
+	}));
     }
 
     closeVideoEditClicked(e){
@@ -115,6 +138,14 @@ class App extends Component {
 	this.setState({
 	    editVideo: null
 	});
+    }
+
+    editVideoField(name, e){
+	var video = this.state.videos[this.state.editVideo];
+	var videoData = video['data'] || {};
+	videoData[name] = e.target.value;
+	video['data'] = videoData;
+	this.forceUpdate();
     }
     
     renderEditVideo(){
@@ -124,22 +155,93 @@ class App extends Component {
 	    display: "block",
 	    opacity: 1,
 	    transform: "scaleX(1)",
-	    top: "10%"
+	    top: "0",
+	    maxHeight: "100%"
 	};
 	var video = this.state.videos[this.state.editVideo];
 	var videoObj = new Video(video);
 	var videoData = video['data'] || {};
+	if(!videoData.Type){
+	    videoData.Type = 'movie';
+	}
 	return (<div className="modal open" style={styleProps}>
           <div className="modal-content">
 	    <h4>Edit {videoObj.title}</h4>
             <form className="col s12">
 		<div className="row">
-		<div className="input-field col s6">
-		<input placeholder="Placeholder" id="first_name" type="text" className="validate"></input>
-		<label htmlFor="first_name">First Name</label>
+		<div className="col s3">
+		<label htmlFor="edit-title">Title</label>
+		</div>
+		<div className="col s9">
+		<input id="edit-title" placeholder="Title" type="text" value={videoData.Title} onChange={self.editVideoField.bind(self, 'Title')}></input>
 		</div>
 		</div>
+
+		<div className="row">
+		<div className="col s3">
+		<label htmlFor="edit-plot">Plot</label>
+		</div>
+		<div className="col s9">
+		<input id="edit-plot" placeholder="Plot" type="text" value={videoData.Plot} onChange={self.editVideoField.bind(self, 'Plot')}></input>
+		</div>
+		</div>
+
+		<div className="row">
+		<div className="col s3">
+		<label htmlFor="edit-year">Year</label>
+		</div>
+		<div className="col s9">
+		<input id="edit-year" placeholder="Year" type="text" value={videoData.Year} onChange={self.editVideoField.bind(self, 'Year')}></input>
+		</div>
+		</div>
+
+		<div className="row">
+		<div className="col s3">
+		<label htmlFor="edit-rated">Rated</label>
+		</div>
+		<div className="col s9">
+		<input id="edit-rated" placeholder="Rated" type="text" value={videoData.Rated} onChange={self.editVideoField.bind(self, 'Rated')}></input>
+		</div>
+		</div>
+
+		<div className="row">
+		<div className="col s3">
+		<label htmlFor="edit-type">Type</label>
+		</div>
+		<div className="col s9">
+		<input id="edit-type" placeholder="Type" type="text" value={videoData.Type} onChange={self.editVideoField.bind(self, 'Type')}></input>
+		</div>
+		</div>
+
+		<div className="row">
+		<div className="col s3">
+		<label htmlFor="edit-poster">Poster</label>
+		</div>
+		<div className="col s9">
+		<input id="edit-poster" placeholder="Poster" type="text" value={videoData.Poster} onChange={self.editVideoField.bind(self, 'Poster')}></input>
+		</div>
+		</div>
+
+		<div className="row">
+		<div className="col s3">
+		<label htmlFor="edit-imdb">IMDB Rating</label>
+		</div>
+		<div className="col s9">
+		<input id="edit-imdb" placeholder="IMDB Rating" type="text" value={videoData.imdbRating} onChange={self.editVideoField.bind(self, 'imdbRating')}></input>
+		</div>
+		</div>
+
+		<div className="row">
+		<div className="col s3">
+		<label htmlFor="edit-runtime">Runtime</label>
+		</div>
+		<div className="col s9">
+		<input id="edit-runtime" placeholder="Runtime" type="text" value={videoData.Runtime} onChange={self.editVideoField.bind(self, 'Runtime')}></input>
+		</div>
+		</div>
+		
 		</form>
+	</div>
           <div className="modal-footer">
 		<a href="#!" className="modal-action modal-close waves-effect waves-red btn-flat " onClick={self.closeVideoEditClicked.bind(self)}>Close</a>
 		<a href="#!" className="modal-action modal-close waves-effect waves-green btn-flat " onClick={self.saveVideoEditClicked.bind(self)}>Save</a>
