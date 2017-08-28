@@ -73,7 +73,8 @@ class App extends Component {
 	});
     }
 
-    selectVideo(video){
+    selectVideo(video, e){
+	e.preventDefault();
 	this.setState({
 	    selectedVideo: video.id
 	});
@@ -276,7 +277,7 @@ class App extends Component {
 	    badges.push(<span className="chip"><a href="#" onClick={self.editVideoClicked.bind(self, video)}>Edit</a></span>);
 	    var url = BASE_URL + "@download?id=" + video.id;
 	    videoGroup.push(<div className="col s6 m3" key={video.id}>
-      			    <div className="card grey darken-4">
+      			    <a href="#" className="card grey darken-4" onClick={self.selectVideo.bind(self, video)}>
 			    {image}
 			    <div className="card-content white-text">
 			    <span className="card-title">{video.title}</span>
@@ -287,7 +288,7 @@ class App extends Component {
 			           <a className="waves-effect waves-light btn" onClick={self.selectVideo.bind(self, video)}>Watch</a>
           			   <a className="waves-effect waves-light btn" href={url}>Download</a>
 			         </div>
-			      </div>
+			      </a>
 			    </div>);
 	    if(videoGroup.length === 4){
 		var key = "videogroup" + count;

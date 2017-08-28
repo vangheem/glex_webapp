@@ -28,6 +28,21 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>GLEX</title>
+    <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        /**
+         * This script will set the 'initial-scale' value on the viewport metatag
+         * The scale is used to fit the template on Kindle Fire mobile devices
+         * This must be handled in the head of the document because the scale
+         * is not affected once the page finishes loading
+         */
+        var vp = document.getElementById('viewport');
+
+        var initialScale = Math.max(screen.width, screen.height)/1920;
+
+        vp.setAttribute('content','width=device-width, initial-scale=' + initialScale + ', maximum-scale=' + initialScale, + 'minimum-scale=' + initialScale);
+
+    </script>
   </head>
   <body>
     <noscript>

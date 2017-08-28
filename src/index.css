@@ -8,3 +8,7 @@ body {
 .responsive-video {
     min-width: 700px;
 }
+
+a.card {
+    display: block;
+}
