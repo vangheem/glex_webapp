@@ -47,15 +47,15 @@ class Video {
 	this.rated = 'Unknown';
 	this.image = 'movie.png';
 	this.plot = this.rating = this.length = this.year = null;
-	if(data['data'] && data['data']['Response'] == 'True'){
+	if(data['data'] && data['data']['Response'] === 'True'){
 	    data = data['data']
-	    if(data['Type'] == 'movie'){
-		this.title = data['Title'];
+	    if(data['Type'] === 'movie'){
+			this.title = data['Title'];
 	    }
 	    this.rated = data['Rated'];
 	    this.rating = data['imdbRating'];
-	    if(data['Poster'] && data['Poster'] != 'N/A'){
-		this.image = data['Poster'];
+	    if(data['Poster'] && data['Poster'] !== 'N/A'){
+			this.image = data['Poster'];
 	    }
 	    this.year = data['Year'];
 	    this.length = data['Runtime'];
@@ -155,11 +155,11 @@ class App extends Component {
     }
 
     editVideoField(name, e){
-	var video = this.state.videos[this.state.editVideo];
-	var videoData = video['data'] || {};
-	videoData[name] = e.target.value;
-	video['data'] = videoData;
-	this.forceUpdate();
+		var video = this.state.videos[this.state.editVideo];
+		var videoData = video['data'] || {};
+		videoData[name] = e.target.value;
+		video['data'] = videoData;
+		this.forceUpdate();
     }
     
     renderEditVideo(){
@@ -272,25 +272,27 @@ class App extends Component {
 	    var video = new Video(videoData);
 	    var image = '';
 	    if(video.image){
-		image = <div className="card-image"><img src={video.image} alt="movie"></img></div>
+			image = <div className="card-image"><img src={video.image} alt="movie"></img></div>
 	    }
 	    var badges = [];
 	    if(video.rating){
-	        badges.push(<span className="chip">IMDB: {video.rating}</span>);
+	        badges.push(<span key="imdb" className="chip">IMDB: {video.rating}</span>);
 	    }
 	    if(video.rated){
-		badges.push(<span className="chip">{video.rated}</span>);
+			badges.push(<span key="rated" className="chip">{video.rated}</span>);
 	    }
 	    if(video.year){
-		badges.push(<span className="chip">{video.year}</span>);
+			badges.push(<span key="year" className="chip">{video.year}</span>);
 	    }
 	    if(video.length){
-		badges.push(<span className="chip">{video.length}</span>);
+			badges.push(<span key="length" className="chip">{video.length}</span>);
 	    }
-	    badges.push(<span className="chip"><a href="#" onClick={self.editVideoClicked.bind(self, video)}>Edit</a></span>);
+	    badges.push(<span key="edit" className="chip">
+			<a onClick={self.editVideoClicked.bind(self, video)}>Edit</a>
+		</span>);
 	    var url = BASE_URL + "@download?id=" + video.id;
 	    videoGroup.push(<div className="col s6 m3" key={video.id}>
-      			    <a href="#" className="card grey darken-4" onClick={self.selectVideo.bind(self, video)}>
+      			    <button href="#" className="card grey darken-4" onClick={self.selectVideo.bind(self, video)}>
 			    {image}
 			    <div className="card-content white-text">
 			    <span className="card-title">{video.title}</span>
@@ -301,7 +303,7 @@ class App extends Component {
 			           <a className="waves-effect waves-light btn" onClick={self.selectVideo.bind(self, video)}>Watch</a>
           			   <a className="waves-effect waves-light btn" href={url}>Download</a>
 			         </div>
-			      </a>
+			      </button>
 			    </div>);
 	    if(videoGroup.length === 4){
 		var key = "videogroup" + count;

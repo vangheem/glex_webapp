@@ -9,6 +9,7 @@ body {
     min-width: 300px;
 }
 
-a.card {
+button.card {
     display: block;
+    border: none;
 }
