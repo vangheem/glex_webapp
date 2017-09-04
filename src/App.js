@@ -8,8 +8,8 @@ var BASE_URL = 'https://glex.nathanvangheem.com/';
 
 var getObjectValues = function(ob){
 	if(!Object.values){
-		var vals = Object.keys(this).map(function(key) {
-			return this[key];
+		var vals = Object.keys(ob).map(function(key) {
+			return ob[key];
 		});
 		return vals;
 	}

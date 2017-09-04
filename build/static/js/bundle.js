@@ -59,7 +59,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "45ca7cda068f4b23c6ff"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "d92f547a7c14cd0ddd23"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
@@ -42017,8 +42017,8 @@ var BASE_URL = 'https://glex.nathanvangheem.com/';
 
 var getObjectValues = function getObjectValues(ob) {
 			if (!Object.values) {
-						var vals = Object.keys(this).map(function (key) {
-									return this[key];
+						var vals = Object.keys(ob).map(function (key) {
+									return ob[key];
 						});
 						return vals;
 			}
