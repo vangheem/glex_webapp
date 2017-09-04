@@ -1,9 +1,19 @@
-import React, { Component } from 'react';
 import './App.css';
+
+import React, { Component } from 'react';
 
 var BASE_URL = 'https://glex.nathanvangheem.com/';
 //var BASE_URL = 'http://localhost:8080/';
 
+
+if(!Object.prototype.values){
+	Object.prototype.values = function(){
+		var vals = Object.keys(this).map(function(key) {
+			return this[key];
+		});
+		return vals;
+	}
+}
 var http = function(url, method, callback, data){
     var xhr = new XMLHttpRequest();
 
