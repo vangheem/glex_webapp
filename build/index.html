@@ -1,1 +1,63 @@
-<!DOCTYPE html><html lang="en"><head><base href="./app/"/><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name="theme-color" content="#000000"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/css/materialize.min.css"><link rel="stylesheet" href="index.styles.css"><link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet"><link rel="manifest" href="/app/manifest.json"><link rel="shortcut icon" href="/app/favicon.ico"><title>GLEX</title><meta id="viewport" name="viewport" content="width=device-width,initial-scale=1"><script>var vp=document.getElementById("viewport"),initialScale=Math.max(screen.width,screen.height)/1920;vp.setAttribute("content","width=device-width, initial-scale="+initialScale+", maximum-scale="+initialScale,NaN+initialScale)</script><link href="/app/static/css/main.e52e38fb.css" rel="stylesheet"></head><body><noscript>You need to enable JavaScript to run this app.</noscript><div id="root"></div><script type="text/javascript" src="/app/static/js/main.994f0b0e.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <base href="./app/">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/css/materialize.min.css">
+    <link rel="stylesheet" href="index.styles.css">
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+
+    <!--
+      manifest.json provides metadata used when your web app is added to the
+      homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
+    -->
+    <link rel="manifest" href="/app/manifest.json">
+    <link rel="shortcut icon" href="/app/favicon.ico">
+    <!--
+      Notice the use of /app in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "/app/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>GLEX</title>
+    <meta id="viewport" name="viewport" content="width=device-width,initial-scale=1">
+    <script>
+        /**
+         * This script will set the 'initial-scale' value on the viewport metatag
+         * The scale is used to fit the template on Kindle Fire mobile devices
+         * This must be handled in the head of the document because the scale
+         * is not affected once the page finishes loading
+         */
+        var vp = document.getElementById('viewport');
+
+        var initialScale = Math.max(screen.width, screen.height)/1920;
+
+        vp.setAttribute('content','width=device-width, initial-scale=' + initialScale + ', maximum-scale=' + initialScale, + 'minimum-scale=' + initialScale);
+
+    </script>
+  <link href="/app/static/css/main.4a7c33df.css" rel="stylesheet"></head>
+  <body>
+    <noscript>
+      You need to enable JavaScript to run this app.
+    </noscript>
+    <div id="root"></div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+  <script type="text/javascript" src="/app/static/js/main.6acfd2e2.js"></script></body>
+</html>
