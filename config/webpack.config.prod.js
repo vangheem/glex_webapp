@@ -192,7 +192,7 @@ module.exports = {
                   loader: require.resolve('css-loader'),
                   options: {
                     importLoaders: 1,
-                    minimize: false,
+                    minimize: true,
                     sourceMap: true,
                   },
                 },
@@ -239,16 +239,16 @@ module.exports = {
       inject: true,
       template: paths.appHtml,
       minify: {
-        removeComments: false,
-        collapseWhitespace: false,
+        removeComments: true,
+        collapseWhitespace: true,
         removeRedundantAttributes: true,
         useShortDoctype: true,
-        removeEmptyAttributes: false,
-        removeStyleLinkTypeAttributes: false,
-        keepClosingSlash: false,
-        minifyJS: false,
-        minifyCSS: false,
-        minifyURLs: false,
+        removeEmptyAttributes: true,
+        removeStyleLinkTypeAttributes: true,
+        keepClosingSlash: true,
+        minifyJS: true,
+        minifyCSS: true,
+        minifyURLs: true,
       },
     }),
     // Makes some environment variables available to the JS code, for example:
@@ -305,7 +305,7 @@ module.exports = {
         }
         console.log(message);
       },
-      minify: false,
+      minify: true,
       // For unknown URLs, fallback to the index page
       navigateFallback: publicUrl + '/index.html',
       // Ignores URLs starting from /__ (useful for Firebase):

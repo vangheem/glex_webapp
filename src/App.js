@@ -77,21 +77,28 @@ class App extends Component {
     }
 
     componentDidMount() {
-	var self = this;
-	http(BASE_URL + '@videos', 'GET', function(xhr){
-	    self.setState({videos: JSON.parse(xhr.responseText)});
-	});
-	http(BASE_URL + '@get-token', 'POST', function(xhr){
-	    self.setState({authToken: xhr.responseText});
-	});
+		var self = this;
+		http(BASE_URL + '@videos', 'GET', function(xhr){
+	    	self.setState({videos: JSON.parse(xhr.responseText)});
+		});
+		http(BASE_URL + '@get-token', 'POST', function(xhr){
+	    	self.setState({authToken: xhr.responseText});
+		});
     }
 
     selectVideo(video, e){
-	e.preventDefault();
-	this.setState({
-	    selectedVideo: video.id
-	});
-	window.scrollTo(0, 0);
+		var self = this;
+		e.preventDefault();
+		this.setState({
+	    	selectedVideo: video.id
+		}, function(){
+			setTimeout(function(){
+				if(self.refs.video.paused){
+					self.refs.video.play();
+				}
+			}, 200);
+		});
+		window.scrollTo(0, 0);
     }
 
     getFilteredVideos(){
@@ -109,16 +116,16 @@ class App extends Component {
     }
 
     filterChanged(e){
-	this.setState({
-	    filter: e.target.value
-	});
+		this.setState({
+	    	filter: e.target.value
+		});
     }
 
     editVideoClicked(video, e){
-	e.preventDefault();
-	this.setState({
-	    editVideo: video.id
-	});
+		e.preventDefault();
+		this.setState({
+	    	editVideo: video.id
+		});
     }
 
     saveVideoEditClicked(e){
@@ -321,10 +328,9 @@ class App extends Component {
 	    var url = BASE_URL + "@stream?id=" + this.state.selectedVideo;
 	    selectedVideo = (
 		<div className="glex-video-container">
-		    <video key="{this.state.selectedVideo}-container" className="responsive-video" autoPlay
-		           id={this.state.selectedVideo} controls
+		    <video key="{this.state.selectedVideo}-container" className="responsive-video"
+		           id={this.state.selectedVideo} controls ref="video" preload
 		           src={url}>
-
 		    </video>
 		</div>
             );
