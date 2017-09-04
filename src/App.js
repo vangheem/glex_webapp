@@ -6,14 +6,17 @@ var BASE_URL = 'https://glex.nathanvangheem.com/';
 //var BASE_URL = 'http://localhost:8080/';
 
 
-if(!Object.prototype.values){
-	Object.prototype.values = function(){
+var getObjectValues = function(ob){
+	if(!Object.values){
 		var vals = Object.keys(this).map(function(key) {
 			return this[key];
 		});
 		return vals;
 	}
+	return Object.values(ob);
 }
+
+
 var http = function(url, method, callback, data){
     var xhr = new XMLHttpRequest();
 
@@ -93,11 +96,11 @@ class App extends Component {
 
     getFilteredVideos(){
 	if(!this.state.filter){
-	    return Object.values(this.state.videos);
+	    return getObjectValues(this.state.videos);
 	}
 	var matched = [];
 	var filter = this.state.filter;
-	Object.values(this.state.videos).forEach(function(video){
+	getObjectValues(this.state.videos).forEach(function(video){
 	    if(video.name.toLowerCase().indexOf(filter.toLowerCase()) !== -1){
 		matched.push(video);
 	    }
